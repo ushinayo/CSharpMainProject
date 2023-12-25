@@ -6,8 +6,7 @@ using Model;
 using Model.Config;
 using UnityEngine;
 using Utilities;
-//rty
-//rtyuioiuytre
+//test
 namespace Controller
 {
     public class BotController
