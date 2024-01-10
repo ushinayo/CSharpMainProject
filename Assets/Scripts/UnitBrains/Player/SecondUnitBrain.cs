@@ -35,18 +35,42 @@ namespace UnitBrains.Player
             return base.GetNextStep();
         }
 
+        //Определи какая из целей в result находится ближе всего к нашей базе.
+        //Используй подход, который мы разобрали в 5-ом уроке «Подготовка к домашнему заданию».
+
+        //Для определения расстояния от конкретной цели до нашей базы,
+        //используй метод DistanceToOwnBase.Ты не увидишь его реализации
+        //в этом скрипте, но не волнуйся, это не помешает тебе его вызвать.
+        //Этот метод принимает цель, расстояние от которой до базы
+        //мы хотим узнать, а возвращает как раз это расстояние.
+
+        //После того как ты найдешь ближайшую к базе цель,
+        //в том случае если она действительно была найдена,
+        //очисти список result и добавь в него эту цель.
+        //Верни список result.
+
         protected override List<Vector2Int> SelectTargets()
         {
-            ///////////////////////////////////////
-            // Homework 1.4 (1st block, 4rd module)
-            ///////////////////////////////////////
             List<Vector2Int> result = GetReachableTargets();
-            while (result.Count > 1)
-            {
-                result.RemoveAt(result.Count - 1);
+
+            Vector2Int target = Vector2Int.zero;
+            float distance = float.MaxValue;
+
+            foreach (var j in result) 
+            { 
+                float range = DistanceToOwnBase(j);
+                if(distance > range)
+                {
+                    target = j;
+                    distance = range;
+                }
             }
+
+            result.Clear();
+            if (distance < float.MaxValue)
+                result.Add(target);
+
             return result;
-            ///////////////////////////////////////
         }
 
         public override void Update(float deltaTime, float time)
