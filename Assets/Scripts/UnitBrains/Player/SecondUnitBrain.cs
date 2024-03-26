@@ -45,9 +45,7 @@ namespace UnitBrains.Player
                 return unit.Pos;
             else
             {
-                Vector2Int nextTarget = Vector2Int.right;
-                target = target.CalcNextStepTowards(nextTarget);
-                return target;
+                return unit.Pos.CalcNextStepTowards(target);
             }
         }
 
