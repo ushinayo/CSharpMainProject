@@ -97,6 +97,7 @@ namespace UnitBrains.Player
                 float t = _cooldownTime / (OverheatCooldown / 10);
                 _temperature = Mathf.Lerp(OverheatTemperature, 0, t);
                 if (t >= 1)
+
                 {
                     _cooldownTime = 0;
                     _overheated = false;
