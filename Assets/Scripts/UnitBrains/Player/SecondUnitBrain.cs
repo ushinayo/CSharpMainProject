@@ -54,41 +54,25 @@ namespace UnitBrains.Player
 
         protected override List<Vector2Int> SelectTargets()
         {
-            List<Vector2Int> _allTargets = new List<Vector2Int>();
             List<Vector2Int> _targetsForAttack = new List<Vector2Int>();
-
-            int indexCurrentTargetForAttack = unitId % MaxTargets;
-            Vector2Int closestTarget = new();
-            int minWeight = int.MaxValue;
+            TargetsOutReach.Clear();
 
             foreach (var target in GetAllTargets())
-                _allTargets.Add(target);
+                TargetsOutReach.Add(target);
 
-            SortByDistanceToOwnBase(_allTargets);
-
-            for (int i = 0; i < _allTargets.Count; i++)
+            if (TargetsOutReach.Count == 0)
             {
-                int weight = Math.Abs(i - indexCurrentTargetForAttack);
-
-                if (IsTargetInRange(_allTargets[i]))
-                {
-                    if (weight < minWeight)
-                    {
-                        minWeight = weight;
-                        closestTarget = _allTargets[i];
-                        _targetsForAttack.Add(closestTarget);
-                    }
-                }
-                else
-                    TargetsOutReach.Add(_allTargets[i]);
+                TargetsOutReach.Add(runtimeModel.RoMap.Bases[IsPlayerUnitBrain ? RuntimeModel.BotPlayerId : RuntimeModel.PlayerId]);
             }
 
-            if (_allTargets.Count == 1)
-            {
-                var enemyBaseTarget = runtimeModel.RoMap.Bases[
-                IsPlayerUnitBrain ? RuntimeModel.BotPlayerId : RuntimeModel.PlayerId];
-                _targetsForAttack.Add(enemyBaseTarget);
-            }
+            SortByDistanceToOwnBase(TargetsOutReach);
+
+            int indexCurrentTargetForAttack = unitId % MaxTargets;
+            int bestIndex = Mathf.Min(indexCurrentTargetForAttack, TargetsOutReach.Count - 1);
+            Vector2Int bestTarget = TargetsOutReach[bestIndex];
+
+            if (IsTargetInRange(bestTarget))
+                _targetsForAttack.Add(bestTarget);
 
             return _targetsForAttack;
         }
