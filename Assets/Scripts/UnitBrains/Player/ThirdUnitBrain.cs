@@ -18,7 +18,7 @@ namespace UnitBrains.Player
 
         public override string TargetUnitName => "Ironclad Behemoth";
         private UnitState currentState = UnitState.Move;
-        private float transitionTime = 0.1f;
+        private float transitionTime = 1f;
         private bool stateChange = true;
 
         //protected override void GenerateProjectiles(Vector2Int forTarget, List<BaseProjectile> intoList)
@@ -26,6 +26,7 @@ namespace UnitBrains.Player
         //    var projectile = CreateProjectile(forTarget);
         //    AddProjectileToList(projectile, intoList);
         //}
+
         public override Vector2Int GetNextStep()
         {
             Vector2Int position = base.GetNextStep();
@@ -44,7 +45,7 @@ namespace UnitBrains.Player
         {
             if (stateChange)
             {
-                transitionTime -= Time.deltaTime * 10;
+                transitionTime -= deltaTime;
 
                 if (transitionTime <= 0)
                 {
