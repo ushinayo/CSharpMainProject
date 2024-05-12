@@ -8,7 +8,8 @@ namespace UnitBrains.Pathfinding
     {
         public Vector2Int StartPoint => startPoint;
         public Vector2Int EndPoint => endPoint;
-        
+        public IEnumerable<Vector2Int> Nodes { get; internal set; }
+
         protected readonly IReadOnlyRuntimeModel runtimeModel;
         protected readonly Vector2Int startPoint;
         protected readonly Vector2Int endPoint;

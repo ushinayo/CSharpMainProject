@@ -3,7 +3,11 @@
     "",
     "\\Assets",
     "\\Assets\\Scripts",
+    "\\Assets\\Scripts\\Model",
+    "\\Assets\\Scripts\\Model\\Runtime",
+    "\\Assets\\Scripts\\Model\\Runtime\\Projectiles",
     "\\Assets\\Scripts\\UnitBrains",
+    "\\Assets\\Scripts\\UnitBrains\\Pathfinding",
     "\\Assets\\Scripts\\UnitBrains\\Player"
   ],
   "SelectedNode": "\\Assets\\Scripts\\UnitBrains\\Player\\SecondUnitBrain.cs",
