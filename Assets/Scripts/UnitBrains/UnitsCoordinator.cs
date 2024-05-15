@@ -17,8 +17,6 @@ namespace Assets.Scripts.UnitBrains
 }
 public class UnitsCoordinator : BaseUnitBrain
 {
-
-    private static UnitsCoordinator _instance;
     private IReadOnlyRuntimeModel _runtimeModel = ServiceLocator.Get<IReadOnlyRuntimeModel>();
     private IReadOnlyUnit _runtimePos;
     private Vector2Int _playerBase;
@@ -29,15 +27,7 @@ public class UnitsCoordinator : BaseUnitBrain
     public UnitsCoordinator()
     {
     }
-
-    public static UnitsCoordinator GetInstance()
-    {
-        if (_instance == null)
-            _instance = new UnitsCoordinator();
-
-        return _instance;
-    }
-
+ 
     public Vector2Int FindTargetEnemy()
     {
         IEnumerable<Vector2Int> unitPositions = GetAllTargets();

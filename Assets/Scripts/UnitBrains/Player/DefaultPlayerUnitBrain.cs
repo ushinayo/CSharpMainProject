@@ -24,7 +24,7 @@ namespace UnitBrains.Player
 
         public override Vector2Int GetNextStep()
         {
-            UnitsCoordinator unitsCoordinator = UnitsCoordinator.GetInstance();
+            UnitsCoordinator unitsCoordinator = new UnitsCoordinator();
             Vector2Int recommendedTargetPosition = unitsCoordinator.FindTargetEnemy();
             return recommendedTargetPosition;
         }

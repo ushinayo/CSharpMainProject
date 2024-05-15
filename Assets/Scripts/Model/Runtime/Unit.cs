@@ -15,6 +15,7 @@ namespace Model.Runtime
         public UnitConfig Config { get; }
         public Vector2Int Pos { get; private set; }
         public int Health { get; private set; }
+        public UnitsCoordinator UnitsCoordinator { get; set; }
         public bool IsDead => Health <= 0;
         public BaseUnitPath ActivePath => _brain?.ActivePath;
         public IReadOnlyList<BaseProjectile> PendingProjectiles => _pendingProjectiles;
@@ -26,11 +27,12 @@ namespace Model.Runtime
         private float _nextBrainUpdateTime = 0f;
         private float _nextMoveTime = 0f;
         private float _nextAttackTime = 0f;
-        
-        public Unit(UnitConfig config, Vector2Int startPos)
+
+        public Unit(UnitConfig config, Vector2Int startPos, UnitsCoordinator unitsCoordinator)
         {
             Config = config;
             Pos = startPos;
+            UnitsCoordinator = unitsCoordinator;
             Health = config.MaxHealth;
             _brain = UnitBrainProvider.GetBrain(config);
             _brain.SetUnit(this);
