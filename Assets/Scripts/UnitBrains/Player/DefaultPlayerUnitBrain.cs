@@ -21,5 +21,12 @@ namespace UnitBrains.Player
             var distanceB = DistanceToOwnBase(b);
             return distanceA.CompareTo(distanceB);
         }
+
+        public override Vector2Int GetNextStep()
+        {
+            UnitsCoordinator unitsCoordinator = UnitsCoordinator.GetInstance();
+            Vector2Int recommendedTargetPosition = unitsCoordinator.FindTargetEnemy();
+            return recommendedTargetPosition;
+        }
     }
 }
