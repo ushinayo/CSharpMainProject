@@ -18,9 +18,9 @@ namespace UnitBrains.Player
         private bool _overheated;
 
         private List<Vector2Int> TargetsOutReach = new List<Vector2Int>();
-        private const int MaxTargets = 4;
-        private static int idValue = 0;
-        private int unitId = idValue++;
+        private const int MaxTargets = 3;
+        private static int unitCounter = 0;
+        private int unitNumber;
 
         protected override void GenerateProjectiles(Vector2Int forTarget, List<BaseProjectile> intoList)
         {
@@ -40,41 +40,79 @@ namespace UnitBrains.Player
 
         public override Vector2Int GetNextStep()
         {
-            Vector2Int target = Vector2Int.zero;
-            if (TargetsOutReach.Count > 0)
-                target = TargetsOutReach[0];
-            else
-                target = unit.Pos;
+            Vector2Int currentPos = unit.Pos;
 
-            if (IsTargetInRange(target))
-                return unit.Pos;
+            // Если есть доступные вражеские цели, выбираем ближайшую для атаки
+            if (TargetsOutReach.Count > 0)
+            {
+                Vector2Int nearestEnemy = FindNearestEnemy(currentPos);
+                if (IsTargetInRange(nearestEnemy))
+                    return currentPos;
+                else
+                    return currentPos.CalcNextStepTowards(nearestEnemy);
+            }
             else
-                return unit.Pos.CalcNextStepTowards(target);
+            {
+                // Если вражеских целей нет, атакуем базу противника
+                Vector2Int enemyBase = runtimeModel.RoMap.Bases[IsPlayerUnitBrain ? RuntimeModel.BotPlayerId : RuntimeModel.PlayerId];
+                if (IsTargetInRange(enemyBase))
+                    return currentPos;
+                else
+                    return currentPos.CalcNextStepTowards(enemyBase);
+            }
+        }
+
+        // Метод для поиска ближайшей вражеской цели
+        private Vector2Int FindNearestEnemy(Vector2Int currentPosition)
+        {
+            Vector2Int nearestEnemy = TargetsOutReach[0];
+            float minDistance = Vector2Int.Distance(currentPosition, nearestEnemy);
+
+            foreach (Vector2Int enemyPos in TargetsOutReach)
+            {
+                float distance = Vector2Int.Distance(currentPosition, enemyPos);
+                if (distance < minDistance)
+                {
+                    minDistance = distance;
+                    nearestEnemy = enemyPos;
+                }
+            }
+
+            return nearestEnemy;
         }
 
         protected override List<Vector2Int> SelectTargets()
         {
-            List<Vector2Int> _targetsForAttack = new List<Vector2Int>();
+            List<Vector2Int> targetsForAttack = new List<Vector2Int>();
             TargetsOutReach.Clear();
 
-            foreach (var target in GetAllTargets())
-                TargetsOutReach.Add(target);
+            // Произведем поиск целей и добавим их в список
+            foreach (var enemyTarget in GetAllTargets())
+            {
+                TargetsOutReach.Add(enemyTarget);
+            }
 
+            // Если в списке целей никого нет, добавим базу противника
             if (TargetsOutReach.Count == 0)
             {
                 TargetsOutReach.Add(runtimeModel.RoMap.Bases[IsPlayerUnitBrain ? RuntimeModel.BotPlayerId : RuntimeModel.PlayerId]);
             }
-
+            // Сортируем цели по дистанции до нашей базы
             SortByDistanceToOwnBase(TargetsOutReach);
 
-            int indexCurrentTargetForAttack = unitId % MaxTargets;
-            int bestIndex = Mathf.Min(indexCurrentTargetForAttack, TargetsOutReach.Count - 1);
-            Vector2Int bestTarget = TargetsOutReach[bestIndex];
+            // Рассчитываем номер текущего юнита
+            unitNumber = unitCounter % MaxTargets;
 
-            if (IsTargetInRange(bestTarget))
-                _targetsForAttack.Add(bestTarget);
+            // Определяем цель, которую нужно атаковать
+            int targetIndex = Mathf.Min(unitNumber, TargetsOutReach.Count - 1);
+            Vector2Int target = TargetsOutReach[targetIndex];
 
-            return _targetsForAttack;
+            // Проверяем, что цель находится в радиусе атаки и добавляем ее в список целей для атаки
+            if (IsTargetInRange(target))
+            {
+                targetsForAttack.Add(target);
+            }
+            return targetsForAttack;
         }
 
         public override void Update(float deltaTime, float time)
