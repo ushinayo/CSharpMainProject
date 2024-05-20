@@ -38,31 +38,29 @@ namespace UnitBrains.Player
             }
         }
 
-        //public override Vector2Int GetNextStep()
-        //{
-        //    Vector2Int currentPos = unit.Pos;
+        public override Vector2Int GetNextStep()
+        {
+            Vector2Int currentPos = unit.Pos;
 
-        //    // Если есть доступные вражеские цели, выбираем ближайшую для атаки
-        //    if (TargetsOutReach.Count > 0)
-        //    {
-        //        Vector2Int nearestEnemy = FindNearestEnemy(currentPos);
-        //        if (IsTargetInRange(nearestEnemy))
-        //            return currentPos;
-        //        else
-        //            return currentPos.CalcNextStepTowards(nearestEnemy);
-        //    }
-        //    else
-        //    {
-        //        // Если вражеских целей нет, атакуем базу противника
-        //        Vector2Int enemyBase = runtimeModel.RoMap.Bases[IsPlayerUnitBrain ? RuntimeModel.BotPlayerId : RuntimeModel.PlayerId];
-        //        if (IsTargetInRange(enemyBase))
-        //            return currentPos;
-        //        else
-        //            return currentPos.CalcNextStepTowards(enemyBase);
-        //    }
-        //}
+            if (TargetsOutReach.Count > 0)
+            {
+                Vector2Int nearestEnemy = FindNearestEnemy(currentPos);
+                if (IsTargetInRange(nearestEnemy))
+                    return currentPos;
+                else
+                    return currentPos.CalcNextStepTowards(nearestEnemy);
+            }
+            else
+            {
+                Vector2Int enemyBase = runtimeModel.RoMap.Bases[IsPlayerUnitBrain ? RuntimeModel.BotPlayerId : RuntimeModel.PlayerId];
+                if (IsTargetInRange(enemyBase))
+                    return currentPos;
+                else
+                    return currentPos.CalcNextStepTowards(enemyBase);
+            }
+        }
 
-        // Метод для поиска ближайшей вражеской цели
+
         private Vector2Int FindNearestEnemy(Vector2Int currentPosition)
         {
             Vector2Int nearestEnemy = TargetsOutReach[0];
@@ -77,7 +75,6 @@ namespace UnitBrains.Player
                     nearestEnemy = enemyPos;
                 }
             }
-
             return nearestEnemy;
         }
 
@@ -86,28 +83,23 @@ namespace UnitBrains.Player
             List<Vector2Int> targetsForAttack = new List<Vector2Int>();
             TargetsOutReach.Clear();
 
-            // Произведем поиск целей и добавим их в список
             foreach (var enemyTarget in GetAllTargets())
             {
                 TargetsOutReach.Add(enemyTarget);
             }
 
-            // Если в списке целей никого нет, добавим базу противника
             if (TargetsOutReach.Count == 0)
             {
                 TargetsOutReach.Add(runtimeModel.RoMap.Bases[IsPlayerUnitBrain ? RuntimeModel.BotPlayerId : RuntimeModel.PlayerId]);
             }
-            // Сортируем цели по дистанции до нашей базы
+
             SortByDistanceToOwnBase(TargetsOutReach);
 
-            // Рассчитываем номер текущего юнита
             unitNumber = unitCounter % MaxTargets;
 
-            // Определяем цель, которую нужно атаковать
             int targetIndex = Mathf.Min(unitNumber, TargetsOutReach.Count - 1);
             Vector2Int target = TargetsOutReach[targetIndex];
 
-            // Проверяем, что цель находится в радиусе атаки и добавляем ее в список целей для атаки
             if (IsTargetInRange(target))
             {
                 targetsForAttack.Add(target);
