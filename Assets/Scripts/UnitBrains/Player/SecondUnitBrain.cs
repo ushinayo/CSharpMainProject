@@ -38,27 +38,27 @@ namespace UnitBrains.Player
             }
         }
 
-        public override Vector2Int GetNextStep()
-        {
-            Vector2Int currentPos = unit.Pos;
+        //public override Vector2Int GetNextStep()
+        //{
+        //    Vector2Int currentPos = unit.Pos;
 
-            if (TargetsOutReach.Count > 0)
-            {
-                Vector2Int nearestEnemy = FindNearestEnemy(currentPos);
-                if (IsTargetInRange(nearestEnemy))
-                    return currentPos;
-                else
-                    return currentPos.CalcNextStepTowards(nearestEnemy);
-            }
-            else
-            {
-                Vector2Int enemyBase = runtimeModel.RoMap.Bases[IsPlayerUnitBrain ? RuntimeModel.BotPlayerId : RuntimeModel.PlayerId];
-                if (IsTargetInRange(enemyBase))
-                    return currentPos;
-                else
-                    return currentPos.CalcNextStepTowards(enemyBase);
-            }
-        }
+        //    if (TargetsOutReach.Count > 0)
+        //    {
+        //        Vector2Int nearestEnemy = FindNearestEnemy(currentPos);
+        //        if (IsTargetInRange(nearestEnemy))
+        //            return currentPos;
+        //        else
+        //            return currentPos.CalcNextStepTowards(nearestEnemy);
+        //    }
+        //    else
+        //    {
+        //        Vector2Int enemyBase = runtimeModel.RoMap.Bases[IsPlayerUnitBrain ? RuntimeModel.BotPlayerId : RuntimeModel.PlayerId];
+        //        if (IsTargetInRange(enemyBase))
+        //            return currentPos;
+        //        else
+        //            return currentPos.CalcNextStepTowards(enemyBase);
+        //    }
+        //}
 
 
         private Vector2Int FindNearestEnemy(Vector2Int currentPosition)

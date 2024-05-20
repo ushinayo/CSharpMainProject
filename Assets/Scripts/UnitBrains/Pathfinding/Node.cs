@@ -16,8 +16,6 @@ namespace UnitBrains.Pathfinding
             Pos = position;
         }
 
-
-
         public void CalculateValue()
         {
             Value = BaseCost + Estimate;

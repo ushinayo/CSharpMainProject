@@ -34,10 +34,6 @@ namespace UnitBrains.Pathfinding
             List<Node> openList = new List<Node>() { startNode };
             List<Node> closedList = new List<Node>();
 
-
-
-
-
             int counter = 0;
             int maxCount = runtimeModel.RoMap.Width * runtimeModel.RoMap.Height;
 
