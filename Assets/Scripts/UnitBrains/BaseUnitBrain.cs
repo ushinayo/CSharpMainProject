@@ -31,7 +31,7 @@ namespace UnitBrains
             new (-0.15f, -0.15f),
         };
 
-        public virtual Vector2Int GetNextStep()
+        public virtual Vector2Int GetNextStep() 
         {
             if (HasTargetsInRange())
                 return unit.Pos;
@@ -39,7 +39,7 @@ namespace UnitBrains
             var target = runtimeModel.RoMap.Bases[
                 IsPlayerUnitBrain ? RuntimeModel.BotPlayerId : RuntimeModel.PlayerId];
 
-            _activePath = new DummyUnitPath(runtimeModel, unit.Pos, target);
+            _activePath = new AlgoritmAUnitPath(runtimeModel, unit.Pos, target);
             return _activePath.GetNextStepFrom(unit.Pos);
         }
 

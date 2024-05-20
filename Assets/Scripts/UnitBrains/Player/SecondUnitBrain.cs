@@ -38,29 +38,29 @@ namespace UnitBrains.Player
             }
         }
 
-        public override Vector2Int GetNextStep()
-        {
-            Vector2Int currentPos = unit.Pos;
+        //public override Vector2Int GetNextStep()
+        //{
+        //    Vector2Int currentPos = unit.Pos;
 
-            // Если есть доступные вражеские цели, выбираем ближайшую для атаки
-            if (TargetsOutReach.Count > 0)
-            {
-                Vector2Int nearestEnemy = FindNearestEnemy(currentPos);
-                if (IsTargetInRange(nearestEnemy))
-                    return currentPos;
-                else
-                    return currentPos.CalcNextStepTowards(nearestEnemy);
-            }
-            else
-            {
-                // Если вражеских целей нет, атакуем базу противника
-                Vector2Int enemyBase = runtimeModel.RoMap.Bases[IsPlayerUnitBrain ? RuntimeModel.BotPlayerId : RuntimeModel.PlayerId];
-                if (IsTargetInRange(enemyBase))
-                    return currentPos;
-                else
-                    return currentPos.CalcNextStepTowards(enemyBase);
-            }
-        }
+        //    // Если есть доступные вражеские цели, выбираем ближайшую для атаки
+        //    if (TargetsOutReach.Count > 0)
+        //    {
+        //        Vector2Int nearestEnemy = FindNearestEnemy(currentPos);
+        //        if (IsTargetInRange(nearestEnemy))
+        //            return currentPos;
+        //        else
+        //            return currentPos.CalcNextStepTowards(nearestEnemy);
+        //    }
+        //    else
+        //    {
+        //        // Если вражеских целей нет, атакуем базу противника
+        //        Vector2Int enemyBase = runtimeModel.RoMap.Bases[IsPlayerUnitBrain ? RuntimeModel.BotPlayerId : RuntimeModel.PlayerId];
+        //        if (IsTargetInRange(enemyBase))
+        //            return currentPos;
+        //        else
+        //            return currentPos.CalcNextStepTowards(enemyBase);
+        //    }
+        //}
 
         // Метод для поиска ближайшей вражеской цели
         private Vector2Int FindNearestEnemy(Vector2Int currentPosition)
