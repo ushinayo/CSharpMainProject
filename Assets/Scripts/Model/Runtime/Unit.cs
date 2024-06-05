@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Buff;
 using Model.Config;
 using Model.Runtime.Projectiles;
 using Model.Runtime.ReadOnly;
@@ -21,6 +22,8 @@ namespace Model.Runtime
         private readonly List<BaseProjectile> _pendingProjectiles = new();
         private IReadOnlyRuntimeModel _runtimeModel;
         private BaseUnitBrain _brain;
+        private EffectManager _effectManager;
+
         private float _nextBrainUpdateTime = 0f;
         private float _nextMoveTime = 0f;
         private float _nextAttackTime = 0f;
@@ -34,6 +37,7 @@ namespace Model.Runtime
             _brain.SetUnit(this);
             _runtimeModel = ServiceLocator.Get<IReadOnlyRuntimeModel>();
             _brain.SetUnitCoordinator(unitCoordinator);
+            _effectManager = ServiceLocator.Get<EffectManager>();
         }
 
         public void Update(float deltaTime, float time)
@@ -55,7 +59,20 @@ namespace Model.Runtime
 
             if (_nextAttackTime < time && Attack())
             {
-                _nextAttackTime = time + Config.AttackDelay;
+                bool lucky = false;
+                if (Random.Range(1, 100) > 50)
+                {
+                    ServiceLocator.Get<EffectManager>().AddEffect(this, new IncAttSpdEffect(this));
+                    lucky = true;
+                }
+
+                if (!lucky)
+                {
+                    ServiceLocator.Get<EffectManager>().AddEffect(this, new DecAttSpdEffect(this));
+                }
+
+
+                _nextAttackTime = time + Config.AttackDelay * _effectManager.GetModifier(this);
             }
         }
         private bool Attack()
